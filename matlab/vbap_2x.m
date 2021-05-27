@@ -35,9 +35,13 @@ cmd_msg2 = rosmessage(cmd_pub2);
 
 % Infinite loop
 while true
+    
+%     OTHER_ODOM = {USV_ODOM.Pose.Pose.Position.X,USV_ODOM.Pose.Pose.Position.Y;...
+%                   USV2_ODOM.Pose.Pose.Position.X,USV2_ODOM.Pose.Pose.Position.Y};
+   
     % Call a function to implement the VBAP algorithm.
-    [u_c1, r_c1] = vbap_slsv(USV_ODOM, RABBIT_POSITION);
-    [u_c2, r_c2] = vbap_slsv(USV2_ODOM, RABBIT_POSITION);
+    [u_c1,u_c2,r_c1,r_c2] = vbap_multi(USV_ODOM, USV2_ODOM, RABBIT_POSITION);
+%     [u_c2, r_c2] = vbap_multi(USV2_ODOM, OTHER_ODOM, RABBIT_POSITION);
     
     % Publish the results
     cmd_msg.Linear.X = u_c1;
