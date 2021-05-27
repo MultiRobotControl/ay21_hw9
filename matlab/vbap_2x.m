@@ -40,6 +40,7 @@ while true
     
     if isempty(RABBIT_POSITION)
         disp('Warning - Rabbit Position is empty.')
+<<<<<<< HEAD
         v_c=0;r_c=0; 
     elseif isempty(USV1_ODOM)
         disp('Warning - USV Odometry is empty.')
@@ -60,6 +61,26 @@ while true
         
         fprintf('v1_c=%.2f, r1_c=%.2f,v2_c=%.2f, r2_c=%.2f',v_c(1),r_c(1),v_c(2),r_c(2)); 
         
+=======
+        v1_c=0;r1_c=0;v2_c=0;r2_c=0; 
+    elseif isempty(USV1_ODOM)
+        disp('Warning - USV Odometry is empty.')
+        v1_c=0;r1_c=0;v2_c=0;r2_c=0; 
+    else
+        % Call a function to implement the VBAP algorithm.
+        [v1_c, r1_c,v2_c,r2_c] = vbap_sltv(USV1_ODOM, OTHER_USV_ODOMS, RABBIT_POSITION);
+        
+        % Publish the results
+        cmd1_msg.Linear.X = v1_c;
+        cmd1_msg.Angular.Z = r1_c;
+        send(cmd1_pub, cmd1_msg);
+        
+        % Publish the results
+        cmd2_msg.Linear.X = v2_c;
+        cmd2_msg.Angular.Z = r2_c;
+        send(cmd2_pub, cmd2_msg);
+        
+>>>>>>> d50c9c38303ba30ef937bdbf5b4826a23cc001e8
         pause(0.1);
     end 
 end

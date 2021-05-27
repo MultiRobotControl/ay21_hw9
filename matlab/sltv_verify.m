@@ -1,7 +1,11 @@
 %% Load .bag file and create bag file object. 
 
 
+<<<<<<< HEAD
 fname = '2021-05-26-21-12-54.bag'; 
+=======
+fname = '2021-05-23-20-48-36.bag'; 
+>>>>>>> d50c9c38303ba30ef937bdbf5b4826a23cc001e8
 bag = rosbag(fname);
  
 % Display available topics and message types in bag file. 
