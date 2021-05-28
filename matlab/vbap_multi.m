@@ -1,0 +1,58 @@
+function [v1_c, r1_c,v2_c,r2_c] = vbap_multi(USV1_ODOM,USV2_ODOM, RABBIT_POSITION)
+% Function prototype for implementing 
+kv = 0.1; kh = 1; k0 = 0.1;
+d0 = 25; d1 = 2*d0; 
+
+% Distance errors with rabbit
+Xerr1 = RABBIT_POSITION.Point.X - USV1_ODOM.Pose.Pose.Position.X;
+Yerr1 = RABBIT_POSITION.Point.Y - USV1_ODOM.Pose.Pose.Position.Y;
+Xerr2 = RABBIT_POSITION.Point.X - USV2_ODOM.Pose.Pose.Position.X;
+Yerr2 = RABBIT_POSITION.Point.Y - USV2_ODOM.Pose.Pose.Position.Y;
+% Distance errors with each other 
+XUerr1 = USV2_ODOM.Pose.Pose.Position.X - USV1_ODOM.Pose.Pose.Position.X;
+YUerr1 = USV2_ODOM.Pose.Pose.Position.Y - USV1_ODOM.Pose.Pose.Position.Y; 
+
+% Convert to quaternions
+quat1 = USV1_ODOM.Pose.Pose.Orientation; 
+angles1 = quat2eul([quat1.W quat1.X quat1.Y quat1.Z]); 
+psi1 = angles1(1);
+quat2 = USV2_ODOM.Pose.Pose.Orientation; 
+angles2 = quat2eul([quat2.W quat2.X quat2.Y quat2.Z]); 
+psi2 = angles2(1);
+
+% Desired heading towards leader
+psiLead1 = atan2(Yerr1,Xerr1);
+psiLead2 = atan2(Yerr2,Xerr2);
+
+% Distance and heading errors between individual USV and rabbit 
+distErr1 = sqrt(Xerr1^2 + Yerr1^2); 
+headErr1 = wrapToPi(psiLead1 - psi1); 
+distErr2 = sqrt(Xerr2^2 + Yerr2^2); 
+headErr2 = wrapToPi(psiLead2 - psi2); 
+
+% Spring force
+hIJ = sqrt(XUerr1.^2 + YUerr1.^2);
+eIJ = k0 * (hIJ - d0); 
+psiIJ = atan2(YUerr1, XUerr1); 
+UheadErr1 = wrapToPi(psiIJ - psi1); % psiI = psi1 
+UdistErr1 = hIJ - d0; 
+
+if hIJ < d1
+    psiJ = eIJ * sign(UheadErr1); 
+else 
+    psiJ = 0;
+end
+
+% Control commands
+v1_c = kv * distErr1;
+r1_c = kh * headErr1 + sum(psiJ); 
+v2_c = kv * distErr2;
+r2_c = kh * headErr2;
+fprintf("USV1--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
+    psiLead1,psi1,headErr1,r1_c,distErr1,v1_c);
+fprintf("USV2--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
+    psiLead2,psi2,headErr2,r2_c,distErr2,v2_c);
+fprintf("USV1 to USV2 --> PsiJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
+    psiJ,UheadErr1,UdistErr1);
+
+return
