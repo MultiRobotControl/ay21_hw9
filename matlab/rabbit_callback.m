@@ -1,4 +1,4 @@
-function rabbit_position_callback(~, msg)
+function rabbit_callback(~, msg)
 
 % Example callback function to be called with rabbit position message
 
