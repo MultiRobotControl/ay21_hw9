@@ -5,7 +5,11 @@ clear
 % can all access
 % When we receive an odometry messge, save it here.
 global USV1_ODOM;  
+<<<<<<< HEAD
 global USV2_ODOM; 
+=======
+global OTHER_USV_ODOMS; 
+>>>>>>> 88137ca1300eea6aacf4e6ee17da7efbbf6f7d21
 % When we receive a rabbit posiition, save it here
 global RABBIT_POSITION;
 
@@ -40,6 +44,7 @@ while true
     
     if isempty(RABBIT_POSITION)
         disp('Warning - Rabbit Position is empty.')
+<<<<<<< HEAD
         v1_c=0;r1_c=0;v2_c=0;r2_c=0; 
     elseif isempty(USV1_ODOM)
         disp('Warning - USV Odometry is empty.')
@@ -47,6 +52,37 @@ while true
     else
         % Call a function to implement the VBAP algorithm.
         [v1_c,r1_c,v2_c,r2_c] = vbap_multi(USV1_ODOM, USV2_ODOM, RABBIT_POSITION);
+=======
+<<<<<<< HEAD
+        v_c=0;r_c=0; 
+    elseif isempty(USV1_ODOM)
+        disp('Warning - USV Odometry is empty.')
+        v_c=0;r_c=0; 
+    else
+        % Call a function to implement the VBAP algorithm.
+        [v_c, r_c] = vbap_multi(USV1_ODOM, OTHER_USV_ODOMS, RABBIT_POSITION);
+        
+        % Publish the results
+        cmd1_msg.Linear.X = v_c(1);
+        cmd1_msg.Angular.Z = r_c(1);
+        send(cmd1_pub, cmd1_msg);
+        
+        % Publish the results
+        cmd2_msg.Linear.X = v_c(2);
+        cmd2_msg.Angular.Z = r_c(2);
+        send(cmd2_pub, cmd2_msg);
+        
+        fprintf('v1_c=%.2f, r1_c=%.2f,v2_c=%.2f, r2_c=%.2f',v_c(1),r_c(1),v_c(2),r_c(2)); 
+        
+=======
+        v1_c=0;r1_c=0;v2_c=0;r2_c=0; 
+    elseif isempty(USV1_ODOM)
+        disp('Warning - USV Odometry is empty.')
+        v1_c=0;r1_c=0;v2_c=0;r2_c=0; 
+    else
+        % Call a function to implement the VBAP algorithm.
+        [v1_c, r1_c,v2_c,r2_c] = vbap_sltv(USV1_ODOM, OTHER_USV_ODOMS, RABBIT_POSITION);
+>>>>>>> 88137ca1300eea6aacf4e6ee17da7efbbf6f7d21
         
         % Publish the results
         cmd1_msg.Linear.X = v1_c;
@@ -58,6 +94,10 @@ while true
         cmd2_msg.Angular.Z = r2_c;
         send(cmd2_pub, cmd2_msg);
         
+<<<<<<< HEAD
+=======
+>>>>>>> d50c9c38303ba30ef937bdbf5b4826a23cc001e8
+>>>>>>> 88137ca1300eea6aacf4e6ee17da7efbbf6f7d21
         pause(0.1);
     end 
 end
