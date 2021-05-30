@@ -7,7 +7,11 @@ close all
 clc
 
 %Load the file
+<<<<<<< HEAD
 fname = '2021-05-30-08-02-04.bag';       % Filename
+=======
+fname = '2021-05-25-13-48-53.bag';       % Filename
+>>>>>>> 9939d7b9e0f82b39dccdd2feb19957b500f292d7
 %Create a bag file object with the file name
 bag = rosbag(fname)
 %Display a list of the topics and message types in the bag file
@@ -82,14 +86,21 @@ plot(rabbit_ts.Time-rabbit_ts.Time(1),...
     sqrt((rabbit_ts.Data(:,1)-odom_cora1_ts.Data(:,1)).^2 +...
     (rabbit_ts.Data(:,2)-odom_cora1_ts.Data(:,2)).^2))
 plot(rabbit_ts.Time-rabbit_ts.Time(1),...
+<<<<<<< HEAD
     sqrt((rabbit_ts.Data(:,1)-odom_cora2_ts.Data(:,1)).^2 +...
     (rabbit_ts.Data(:,2)-odom_cora2_ts.Data(:,2)).^2))
 plot(rabbit_ts.Time-rabbit_ts.Time(1),...
+=======
+>>>>>>> 9939d7b9e0f82b39dccdd2feb19957b500f292d7
     sqrt((odom_cora2_ts.Data(:,1)-odom_cora1_ts.Data(:,1)).^2 +...
     (odom_cora2_ts.Data(:,2)-odom_cora1_ts.Data(:,2)).^2))
 xlabel('Time [s]')
 ylabel('Distance [m]')
+<<<<<<< HEAD
 legend('Cora1 dist to rabbit','Cora2 dist to rabbit','dist btwn Cora1 & Cora2','Location','best')
+=======
+legend('dist to rabbit','dist btwn vehicles','Location','best')
+>>>>>>> 9939d7b9e0f82b39dccdd2feb19957b500f292d7
 title(' CMD & Odom vs. Time')
 axis padded
 grid on

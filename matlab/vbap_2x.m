@@ -45,8 +45,13 @@ while true
     other_usv_odoms = {USV_ODOM.Pose.Pose.Position.X,USV_ODOM.Pose.Pose.Position.Y;...
                        USV2_ODOM.Pose.Pose.Position.X,USV2_ODOM.Pose.Pose.Position.Y};
     
+<<<<<<< HEAD
     [u_c_usv1, r_c_usv1] = vbap_slmv(USV_ODOM, other_usv_odoms, RABBIT_POSITION);
     [u_c_usv2, r_c_usv2] = vbap_slmv(USV2_ODOM, other_usv_odoms, RABBIT_POSITION);
+=======
+    [u_c_usv1, r_c_usv1] = vbap_slsv(USV_ODOM, other_usv_odoms, RABBIT_POSITION);
+    [u_c_usv2, r_c_usv2] = vbap_slsv(USV2_ODOM, other_usv_odoms, RABBIT_POSITION);
+>>>>>>> 9939d7b9e0f82b39dccdd2feb19957b500f292d7
     % Publish the results
     cora1_cmd_msg.Linear.X = u_c_usv1;
     cora1_cmd_msg.Angular.Z = r_c_usv1;
