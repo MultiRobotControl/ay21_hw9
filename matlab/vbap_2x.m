@@ -6,6 +6,7 @@ clear
 % When we receive an odometry messge, save it here.
 global USV_ODOM;
 global USV2_ODOM;
+% global OTHER_ODOM;
 % When we receive a rabbit posiition, save it here
 global RABBIT_POSITION;
 
@@ -36,12 +37,10 @@ cmd_msg2 = rosmessage(cmd_pub2);
 % Infinite loop
 while true
     
-%     OTHER_ODOM = {USV_ODOM.Pose.Pose.Position.X,USV_ODOM.Pose.Pose.Position.Y;...
-%                   USV2_ODOM.Pose.Pose.Position.X,USV2_ODOM.Pose.Pose.Position.Y};
-   
+%     OTHER_ODOM = USV2_ODOM;
+    
     % Call a function to implement the VBAP algorithm.
-    [u_c1,u_c2,r_c1,r_c2] = vbap_multi(USV_ODOM, USV2_ODOM, RABBIT_POSITION);
-%     [u_c2, r_c2] = vbap_multi(USV2_ODOM, OTHER_ODOM, RABBIT_POSITION);
+    [u_c1,u_c2,r_c1,r_c2] = vbap_multi2(USV_ODOM, USV2_ODOM, RABBIT_POSITION);
     
     % Publish the results
     cmd_msg.Linear.X = u_c1;
